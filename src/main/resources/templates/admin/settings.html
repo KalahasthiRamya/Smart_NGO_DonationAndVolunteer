@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Settings')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('settings')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('System Settings')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="card custom-table-card p-4 max-w-700">
+                <h6 class="fw-bold mb-4 text-dark"><i class="bi bi-sliders me-2 text-success"></i>Application & External Service Config</h6>
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">NGO Organization Name</label>
+                        <input type="text" class="form-control" value="Smart NGO Platform">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">Payment Integration Mode</label>
+                        <select class="form-select">
+                            <option value="mock" selected>Mock Payment Gateway (Local Demonstration)</option>
+                            <option value="razorpay">Razorpay Live Gateway API</option>
+                            <option value="stripe">Stripe Live Gateway API</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">Notification Service Mode</label>
+                        <select class="form-select">
+                            <option value="mock" selected>Mock Email / SMS Service (Console Logging)</option>
+                            <option value="smtp">Live SMTP Mailer API</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-ngo-primary">Save Settings</button>
+                </form>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

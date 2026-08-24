@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Volunteer Coordination')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('volunteers')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Volunteer Management')"></header>
+
+        <div class="container-fluid p-4">
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Volunteer Metric Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <span class="stat-label">Total Volunteers</span>
+                        <div class="stat-value" th:text="${totalVolunteers}">132</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <span class="stat-label">Active Volunteers</span>
+                        <div class="stat-value text-success" th:text="${activeVolunteers}">112</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <span class="stat-label">Tasks Assigned</span>
+                        <div class="stat-value text-primary">45</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <span class="stat-label">Hours Contributed</span>
+                        <div class="stat-value text-purple" style="color: #8b5cf6;">320</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Volunteer List Table Card -->
+            <div class="card custom-table-card">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0 text-dark">Volunteer List</h6>
+                    <div class="d-flex gap-2">
+                        <form th:action="@{/admin/volunteers}" method="get" class="d-flex gap-2">
+                            <input type="text" name="search" th:value="${searchKeyword}" class="form-control form-control-sm" placeholder="Search volunteer...">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i></button>
+                        </form>
+                        <a th:href="@{/reports/volunteers/export}" class="btn btn-sm btn-outline-success"><i class="bi bi-download me-1"></i> Export</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table custom-table mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Skills</th>
+                                <th>Status</th>
+                                <th>Joined Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="vol : ${volunteers}">
+                                <td class="fw-bold text-muted" th:text="'V00' + ${vol.id}">V001</td>
+                                <td>
+                                    <div class="fw-semibold text-dark" th:text="${vol.user.name}">Sneha Desai</div>
+                                </td>
+                                <td th:text="${vol.user.email}">sneha@gmail.com</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border" th:text="${vol.skills}">Teaching</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-status"
+                                          th:classappend="${vol.status == 'ACTIVE'} ? 'badge-active' : 'badge-inactive'"
+                                          th:text="${vol.status}">Active</span>
+                                </td>
+                                <td th:text="${#temporals.format(vol.joinedDate, 'dd MMM yyyy')}">10 Jan 2024</td>
+                                <td>
+                                    <form th:action="@{/admin/volunteers/status}" method="post" class="d-inline">
+                                        <input type="hidden" name="id" th:value="${vol.id}">
+                                        <input type="hidden" name="status" th:value="${vol.status == 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'}">
+                                        <button type="submit" class="btn btn-sm text-secondary" th:title="${vol.status == 'ACTIVE' ? 'Deactivate' : 'Activate'}">
+                                            <i class="bi" th:classappend="${vol.status == 'ACTIVE'} ? 'bi-toggle-on text-success fs-5' : 'bi-toggle-off text-muted fs-5'"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(volunteers)}">
+                                <td colspan="7" class="text-center py-4 text-muted">No volunteer records found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

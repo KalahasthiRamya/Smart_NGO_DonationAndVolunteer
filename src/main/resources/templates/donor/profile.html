@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('My Profile')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('profile')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Donor Profile')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card custom-table-card p-4">
+                        <div class="text-center mb-4">
+                            <div class="user-avatar mx-auto mb-2 fs-3" style="width: 70px; height: 70px;" th:text="${user.name != null ? #strings.substring(user.name, 0, 1) : 'D'}">R</div>
+                            <h5 class="fw-bold text-dark mb-0" th:text="${user.name}">Rahul Patil</h5>
+                            <span class="badge bg-success bg-opacity-10 text-success fw-bold">REGISTERED DONOR</span>
+                        </div>
+                        <div class="list-group list-group-flush small">
+                            <div class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Email:</span>
+                                <span class="fw-semibold text-dark" th:text="${user.email}">rahul@gmail.com</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Phone:</span>
+                                <span class="fw-semibold text-dark" th:text="${user.phone}">9876543210</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Member Since:</span>
+                                <span class="fw-semibold text-dark" th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}">10 Jan 2024</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">Total Donated:</span>
+                                <span class="fw-bold text-success">₹<span th:text="${#numbers.formatDecimal(donor != null ? donor.totalDonations : 0, 1, 'COMMA', 2, 'POINT')}">15,000</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart NGO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-bg">
+    <div class="auth-card">
+        <div class="row g-0">
+            <!-- Left Branding Column -->
+            <div class="col-md-5 auth-sidebar">
+                <i class="bi bi-heart-pulse-fill display-1 mb-3"></i>
+                <h2 class="fw-bold mb-2">Smart NGO</h2>
+                <p class="text-white-50 fs-6 px-3">Together We Can Make a Difference</p>
+                <div class="mt-4 p-3 bg-white bg-opacity-10 rounded-3 text-start small">
+                    <div class="fw-semibold mb-1"><i class="bi bi-key me-1"></i> Demo Credentials:</div>
+                    <div><strong>Admin:</strong> admin@smartngo.com / admin123</div>
+                    <div><strong>Donor:</strong> rahul@gmail.com / donor123</div>
+                    <div><strong>Volunteer:</strong> sneha@gmail.com / volunteer123</div>
+                </div>
+            </div>
+
+            <!-- Right Login Form -->
+            <div class="col-md-7 auth-form-container">
+                <div class="mb-4">
+                    <h3 class="fw-bold text-dark mb-1">Welcome Back!</h3>
+                    <p class="text-muted small">Login to your account</p>
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-danger py-2 small" th:text="${errorMessage}"></div>
+                <div th:if="${successMessage}" class="alert alert-success py-2 small" th:text="${successMessage}"></div>
+                <div th:if="${param.registered}" class="alert alert-success py-2 small">Registration successful! Please login below.</div>
+
+                <form th:action="@{/login}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                            <input type="email" name="username" class="form-control" placeholder="Enter your email" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                            <label class="form-check-label small text-muted" for="rememberMe">Remember me</label>
+                        </div>
+                        <a href="javascript:void(0)" class="small text-decoration-none text-success fw-semibold">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-ngo-primary w-100 py-2.5">Login</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="small text-muted mb-0">Don't have an account? <a th:href="@{/register}" class="text-success fw-semibold text-decoration-none">Sign up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

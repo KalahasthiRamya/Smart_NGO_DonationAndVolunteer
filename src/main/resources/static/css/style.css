@@ -1,0 +1,295 @@
+/* ==================================================
+   Smart NGO Management Platform - Global Stylesheet
+   Design Palette:
+   - Primary Sidebar: Dark Navy (#1e293b / #0f172a)
+   - Active Highlighting: Emerald Green (#10b981)
+   - Main Background: Clean Light Slate (#f8fafc)
+   - Accent KPI Colors: Purple (#8b5cf6), Amber (#f59e0b), Blue (#3b82f6)
+   ================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --ngo-navy: #1e293b;
+    --ngo-navy-dark: #0f172a;
+    --ngo-green: #10b981;
+    --ngo-green-hover: #059669;
+    --ngo-purple: #8b5cf6;
+    --ngo-orange: #f59e0b;
+    --ngo-blue: #3b82f6;
+    --ngo-bg: #f8fafc;
+    --ngo-card-bg: #ffffff;
+    --ngo-text-dark: #1e293b;
+    --ngo-text-muted: #64748b;
+    --sidebar-width: 250px;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--ngo-bg);
+    color: var(--ngo-text-dark);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Sidebar Styling */
+#sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background-color: var(--ngo-navy);
+    color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar-header {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sidebar-header img, .sidebar-header i {
+    width: 32px;
+    height: 32px;
+}
+
+.sidebar-brand-text {
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+}
+
+.sidebar-nav {
+    padding: 1rem 0;
+    list-style: none;
+    margin: 0;
+}
+
+.sidebar-nav .nav-item {
+    margin-bottom: 0.25rem;
+    padding: 0 0.75rem;
+}
+
+.sidebar-nav .nav-link {
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.925rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.sidebar-nav .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-nav .nav-link.active {
+    background-color: var(--ngo-green) !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.sidebar-nav .nav-link i {
+    font-size: 1.1rem;
+}
+
+/* Main Content Layout */
+#main-content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top Header Navbar */
+.top-header {
+    background-color: #ffffff;
+    height: 70px;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.header-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ngo-navy);
+    margin: 0;
+}
+
+.user-profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ngo-navy);
+    font-weight: 700;
+}
+
+/* Cards & Statistics */
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.stat-icon.green { background-color: #d1fae5; color: #059669; }
+.stat-icon.blue { background-color: #dbeafe; color: #2563eb; }
+.stat-icon.purple { background-color: #f3e8ff; color: #7e22ce; }
+.stat-icon.orange { background-color: #ffedd5; color: #c2410c; }
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ngo-text-dark);
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--ngo-text-muted);
+    font-weight: 500;
+}
+
+.stat-trend {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #059669;
+}
+
+/* Custom Buttons & Badges */
+.btn-ngo-primary {
+    background-color: var(--ngo-green);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-ngo-primary:hover {
+    background-color: var(--ngo-green-hover);
+    color: #ffffff;
+}
+
+.badge-status {
+    padding: 0.35em 0.75em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 50rem;
+}
+
+.badge-active { background-color: #d1fae5; color: #065f46; }
+.badge-inactive { background-color: #fee2e2; color: #991b1b; }
+.badge-completed { background-color: #dbeafe; color: #1e40af; }
+.badge-pending { background-color: #fef3c7; color: #92400e; }
+
+/* Tables */
+.custom-table-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+.custom-table th {
+    background-color: #f8fafc;
+    color: var(--ngo-text-muted);
+    font-weight: 600;
+    font-size: 0.825rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 1.25rem;
+}
+
+.custom-table td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
+}
+
+/* Login/Registration Auth Screen */
+.auth-bg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 900px;
+}
+
+.auth-sidebar {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.auth-form-container {
+    padding: 3rem 2.5rem;
+}

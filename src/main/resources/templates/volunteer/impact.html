@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Volunteer Impact')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('impact')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Volunteer Impact')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="card custom-table-card p-4 mb-4">
+                <h5 class="fw-bold text-dark mb-2">Empowering Communities Through Dedicated Action</h5>
+                <p class="text-muted small mb-0">Your volunteer hours and ground contributions drive tangible change across healthcare, education, and nature drives.</p>
+            </div>
+
+            <div class="row g-4">
+                <div th:each="camp : ${campaigns}" class="col-md-6">
+                    <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                        <span class="badge bg-light text-dark border mb-2 w-auto" th:text="${camp.category}">EDUCATION</span>
+                        <h5 class="fw-bold text-dark" th:text="${camp.name}">Education for All</h5>
+                        <p class="text-muted small" th:text="${camp.description}">Empowering underprivileged youth.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

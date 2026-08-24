@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Make a Donation')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('donate')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Make a Contribution')"></header>
+
+        <div class="container-fluid p-4">
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card custom-table-card p-4">
+                        <h5 class="fw-bold text-dark mb-1"><i class="bi bi-heart-fill text-danger me-2"></i>Donate to Smart NGO</h5>
+                        <p class="text-muted small mb-4">Select a campaign and specify your contribution details.</p>
+
+                        <form th:action="@{/donor/donate}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Select Campaign</label>
+                                <select name="campaignId" class="form-select" required>
+                                    <option th:each="camp : ${campaigns}" th:value="${camp.id}" th:text="${camp.name}" th:selected="${camp.id == selectedCampaignId}"></option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Donation Amount (₹)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light fw-bold">₹</span>
+                                    <input type="number" step="0.01" min="1" name="amount" class="form-control" placeholder="e.g. 2500" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label small fw-semibold text-secondary">Payment Method</label>
+                                <select name="paymentMethod" class="form-select" required>
+                                    <option value="UPI">UPI Payment</option>
+                                    <option value="CARD">Credit / Debit Card</option>
+                                    <option value="NET_BANKING">Net Banking</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-ngo-primary w-100 py-2.5">Proceed to Pay</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

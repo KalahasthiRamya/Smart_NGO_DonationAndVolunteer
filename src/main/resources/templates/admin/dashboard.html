@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head :: head('Impact Dashboard')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('dashboard')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Impact Dashboard')"></header>
+
+        <div class="container-fluid p-4">
+            <!-- Top Alert Messages if any -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- KPI Metric Cards Row -->
+            <div class="row g-3 mb-4">
+                <div class="col-xl-3 col-sm-6">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="stat-label">Total Donations</span>
+                                <div class="stat-value">₹<span th:text="${#numbers.formatDecimal(stats.totalDonations, 1, 'COMMA', 2, 'POINT')}">1,25,000.00</span></div>
+                                <span class="stat-trend"><i class="bi bi-arrow-up-right me-1"></i>+12.5% from last month</span>
+                            </div>
+                            <div class="stat-icon green">
+                                <i class="bi bi-wallet2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="stat-label">Total Donors</span>
+                                <div class="stat-value" th:text="${stats.totalDonors}">245</div>
+                                <span class="stat-trend"><i class="bi bi-arrow-up-right me-1"></i>+10.8% from last month</span>
+                            </div>
+                            <div class="stat-icon blue">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="stat-label">Total Volunteers</span>
+                                <div class="stat-value" th:text="${stats.totalVolunteers}">132</div>
+                                <span class="stat-trend"><i class="bi bi-arrow-up-right me-1"></i>+15.4% from last month</span>
+                            </div>
+                            <div class="stat-icon purple">
+                                <i class="bi bi-person-badge-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="stat-label">Projects Supported</span>
+                                <div class="stat-value" th:text="${stats.activeCampaigns}">8</div>
+                                <span class="stat-trend"><i class="bi bi-arrow-up-right me-1"></i>+8.6% from last month</span>
+                            </div>
+                            <div class="stat-icon orange">
+                                <i class="bi bi-folder-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-8">
+                    <div class="card custom-table-card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0 text-dark">Donations Over Time</h6>
+                            <span class="badge bg-light text-dark">This Month</span>
+                        </div>
+                        <div style="height: 280px;">
+                            <canvas id="donationsOverTimeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card custom-table-card p-4">
+                        <h6 class="fw-bold mb-3 text-dark">Donations by Category</h6>
+                        <div style="height: 280px;">
+                            <canvas id="donationsByCategoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Feeds Row: Recent Activities & Active Campaigns Progress -->
+            <div class="row g-4">
+                <!-- Recent Activities -->
+                <div class="col-lg-6">
+                    <div class="card custom-table-card p-4">
+                        <h6 class="fw-bold mb-3 text-dark">Recent Activities</h6>
+                        <div class="list-group list-group-flush">
+                            <div th:each="don : ${recentDonations}" class="list-group-item px-0 py-2.5 d-flex align-items-center justify-content-between border-bottom-0">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle bg-light p-2 text-success">
+                                        <i class="bi bi-arrow-down-left-circle-fill fs-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold text-dark small">New donation received from <span th:text="${don.donor.user.name}">Rahul Patil</span></div>
+                                        <div class="text-muted small" th:text="${#temporals.format(don.donationDate, 'dd MMM yyyy, HH:mm')}">2 hours ago</div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success bg-opacity-10 text-success fw-bold">₹<span th:text="${don.amount}">1,500</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Active Campaigns -->
+                <div class="col-lg-6">
+                    <div class="card custom-table-card p-4">
+                        <h6 class="fw-bold mb-3 text-dark">Top Campaigns Progress</h6>
+                        <div class="vstack gap-3">
+                            <div th:each="camp : ${activeCampaigns}">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-semibold small text-dark" th:text="${camp.name}">Education for All</span>
+                                    <span class="small text-muted">₹<span th:text="${camp.collectedAmount}">40,000</span> / ₹<span th:text="${camp.targetAmount}">60,000</span></span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success" role="progressbar" th:style="'width: ' + ${camp.progressPercentage} + '%;'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+
+    <script th:src="@{/js/dashboard-charts.js}"></script>
+</body>
+</html>

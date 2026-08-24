@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Attendance Tracking')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('attendance')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Attendance Tracking')"></header>
+
+        <div class="container-fluid p-4">
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h5 class="fw-bold text-dark mb-1">Volunteer Attendance Records</h5>
+                    <p class="text-muted small mb-0">Record and verify participation in NGO events and activities</p>
+                </div>
+                <button type="button" class="btn btn-ngo-primary" data-bs-toggle="modal" data-bs-target="#recordAttendanceModal">
+                    <i class="bi bi-plus-lg me-1"></i> Record Attendance
+                </button>
+            </div>
+
+            <div class="card custom-table-card">
+                <div class="table-responsive">
+                    <table class="table custom-table mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Volunteer</th>
+                                <th>Task / Event</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="att : ${attendanceList}">
+                                <td class="fw-bold text-muted" th:text="'A00' + ${att.id}">A001</td>
+                                <td>
+                                    <div class="fw-semibold text-dark" th:text="${att.volunteer.user.name}">Sneha Desai</div>
+                                    <div class="small text-muted" th:text="${att.volunteer.user.email}">sneha@gmail.com</div>
+                                </td>
+                                <td th:text="${att.task != null ? att.task.title : 'General Activity'}">Food Donation Drive</td>
+                                <td th:text="${#temporals.format(att.attendanceDate, 'dd MMM yyyy')}">01 Jun 2024</td>
+                                <td>
+                                    <span class="badge badge-status"
+                                          th:classappend="${att.status.name() == 'PRESENT'} ? 'badge-active' : 'badge-inactive'"
+                                          th:text="${att.status}">PRESENT</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(attendanceList)}">
+                                <td colspan="5" class="text-center py-4 text-muted">No attendance logs recorded yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Record Attendance Modal -->
+        <div class="modal fade" id="recordAttendanceModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title fw-bold text-dark">Record Attendance</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form th:action="@{/admin/attendance/record}" method="post">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Select Volunteer</label>
+                                <select name="volunteerId" class="form-select" required>
+                                    <option th:each="v : ${volunteers}" th:value="${v.id}" th:text="${v.user.name}"></option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Associated Task/Event</label>
+                                <select name="taskId" class="form-select">
+                                    <option value="">-- General NGO Event --</option>
+                                    <option th:each="t : ${tasks}" th:value="${t.id}" th:text="${t.title}"></option>
+                                </select>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold text-secondary">Attendance Date</label>
+                                    <input type="date" name="date" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold text-secondary">Status</label>
+                                    <select name="status" class="form-select" required>
+                                        <option value="PRESENT">PRESENT</option>
+                                        <option value="ABSENT">ABSENT</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-top-0">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-ngo-primary">Save Attendance</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

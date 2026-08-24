@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('My Profile')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('profile')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Volunteer Profile')"></header>
+
+        <div class="container-fluid p-4">
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card custom-table-card p-4">
+                        <div class="text-center mb-4">
+                            <div class="user-avatar mx-auto mb-2 fs-3" style="width: 70px; height: 70px;" th:text="${user.name != null ? #strings.substring(user.name, 0, 1) : 'V'}">S</div>
+                            <h5 class="fw-bold text-dark mb-0" th:text="${user.name}">Sneha Desai</h5>
+                            <span class="badge bg-purple bg-opacity-10 text-purple fw-bold" style="color: #8b5cf6;">REGISTERED VOLUNTEER</span>
+                        </div>
+
+                        <form th:action="@{/volunteer/profile/update}" method="post" class="mb-3">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Registered Email</label>
+                                <input type="text" class="form-control bg-light" th:value="${user.email}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Phone</label>
+                                <input type="text" class="form-control bg-light" th:value="${user.phone}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Your Skills</label>
+                                <input type="text" name="skills" class="form-control" th:value="${volunteer != null ? volunteer.skills : ''}" placeholder="e.g. Teaching, Logistics, Content Writing">
+                            </div>
+                            <button type="submit" class="btn btn-ngo-primary w-100">Update Skills</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

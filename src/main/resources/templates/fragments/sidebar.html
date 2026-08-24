@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div id="sidebar" th:fragment="sidebar(activeTab)">
+    <div class="sidebar-header">
+        <i class="bi bi-heart-pulse-fill text-success fs-3"></i>
+        <span class="sidebar-brand-text">Smart NGO</span>
+    </div>
+    <ul class="sidebar-nav">
+        <!-- ADMIN NAVIGATION -->
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/dashboard}" class="nav-link" th:classappend="${activeTab == 'dashboard'} ? 'active'">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/donors}" class="nav-link" th:classappend="${activeTab == 'donors'} ? 'active'">
+                <i class="bi bi-people-fill"></i>
+                <span>Donors</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/volunteers}" class="nav-link" th:classappend="${activeTab == 'volunteers'} ? 'active'">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Volunteers</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/donations}" class="nav-link" th:classappend="${activeTab == 'donations'} ? 'active'">
+                <i class="bi bi-cash-stack"></i>
+                <span>Donations</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/campaigns}" class="nav-link" th:classappend="${activeTab == 'campaigns'} ? 'active'">
+                <i class="bi bi-bullseye"></i>
+                <span>Campaigns</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/tasks}" class="nav-link" th:classappend="${activeTab == 'tasks'} ? 'active'">
+                <i class="bi bi-check2-square"></i>
+                <span>Tasks</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/attendance}" class="nav-link" th:classappend="${activeTab == 'attendance'} ? 'active'">
+                <i class="bi bi-calendar-check-fill"></i>
+                <span>Attendance</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/reports}" class="nav-link" th:classappend="${activeTab == 'reports'} ? 'active'">
+                <i class="bi bi-file-earmark-bar-graph-fill"></i>
+                <span>Reports</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/notifications}" class="nav-link" th:classappend="${activeTab == 'messages'} ? 'active'">
+                <i class="bi bi-envelope-fill"></i>
+                <span>Messages</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/settings}" class="nav-link" th:classappend="${activeTab == 'settings'} ? 'active'">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+        </li>
+
+        <!-- DONOR NAVIGATION -->
+        <li sec:authorize="hasRole('DONOR')" class="nav-item">
+            <a th:href="@{/donor/dashboard}" class="nav-link" th:classappend="${activeTab == 'dashboard'} ? 'active'">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('DONOR')" class="nav-item">
+            <a th:href="@{/donor/donate}" class="nav-link" th:classappend="${activeTab == 'donate'} ? 'active'">
+                <i class="bi bi-heart-fill"></i>
+                <span>Make Donation</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('DONOR')" class="nav-item">
+            <a th:href="@{/donor/campaigns}" class="nav-link" th:classappend="${activeTab == 'campaigns'} ? 'active'">
+                <i class="bi bi-bullseye"></i>
+                <span>Campaigns</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('DONOR')" class="nav-item">
+            <a th:href="@{/donor/donations}" class="nav-link" th:classappend="${activeTab == 'donations'} ? 'active'">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                <span>My Donations</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('DONOR')" class="nav-item">
+            <a th:href="@{/donor/receipts}" class="nav-link" th:classappend="${activeTab == 'receipts'} ? 'active'">
+                <i class="bi bi-receipt-cutoff"></i>
+                <span>Receipts</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('DONOR')" class="nav-item">
+            <a th:href="@{/donor/impact}" class="nav-link" th:classappend="${activeTab == 'impact'} ? 'active'">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span>Our Impact</span>
+            </a>
+        </li>
+
+        <!-- VOLUNTEER NAVIGATION -->
+        <li sec:authorize="hasRole('VOLUNTEER')" class="nav-item">
+            <a th:href="@{/volunteer/dashboard}" class="nav-link" th:classappend="${activeTab == 'dashboard'} ? 'active'">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('VOLUNTEER')" class="nav-item">
+            <a th:href="@{/volunteer/tasks}" class="nav-link" th:classappend="${activeTab == 'tasks'} ? 'active'">
+                <i class="bi bi-list-task"></i>
+                <span>My Tasks</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('VOLUNTEER')" class="nav-item">
+            <a th:href="@{/volunteer/opportunities}" class="nav-link" th:classappend="${activeTab == 'opportunities'} ? 'active'">
+                <i class="bi bi-calendar-event"></i>
+                <span>Opportunities</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('VOLUNTEER')" class="nav-item">
+            <a th:href="@{/volunteer/attendance}" class="nav-link" th:classappend="${activeTab == 'attendance'} ? 'active'">
+                <i class="bi bi-calendar-check"></i>
+                <span>Attendance</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('VOLUNTEER')" class="nav-item">
+            <a th:href="@{/volunteer/impact}" class="nav-link" th:classappend="${activeTab == 'impact'} ? 'active'">
+                <i class="bi bi-award-fill"></i>
+                <span>Impact</span>
+            </a>
+        </li>
+
+        <hr class="dropdown-divider bg-secondary opacity-25 my-3 mx-3">
+
+        <li class="nav-item">
+            <form th:action="@{/logout}" method="post" id="logoutForm" class="d-none"></form>
+            <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()" class="nav-link text-danger">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+</div>
+</html>

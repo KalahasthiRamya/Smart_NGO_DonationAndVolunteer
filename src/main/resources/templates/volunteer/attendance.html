@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('My Attendance')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('attendance')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('My Attendance Log')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="card custom-table-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-1">Attendance Percentage</h6>
+                        <span class="small text-muted">Verified by NGO Administrators</span>
+                    </div>
+                    <div class="display-6 fw-bold text-success"><span th:text="${attendancePercentage}">100</span>%</div>
+                </div>
+            </div>
+
+            <div class="card custom-table-card">
+                <div class="table-responsive">
+                    <table class="table custom-table mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Task / Event Name</th>
+                                <th>Attendance Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="att : ${attendanceList}">
+                                <td th:text="${#temporals.format(att.attendanceDate, 'dd MMM yyyy')}">01 Jun 2024</td>
+                                <td th:text="${att.task != null ? att.task.title : 'General Activity'}">Food Donation Drive</td>
+                                <td>
+                                    <span class="badge badge-status"
+                                          th:classappend="${att.status.name() == 'PRESENT'} ? 'badge-active' : 'badge-inactive'"
+                                          th:text="${att.status}">PRESENT</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(attendanceList)}">
+                                <td colspan="3" class="text-center py-4 text-muted">No attendance logs found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

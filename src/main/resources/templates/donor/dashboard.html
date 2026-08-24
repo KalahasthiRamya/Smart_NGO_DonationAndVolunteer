@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Donor Dashboard')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('dashboard')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Donor Dashboard')"></header>
+
+        <div class="container-fluid p-4">
+            <!-- Welcome Header Card -->
+            <div class="card border-0 bg-success text-white p-4 mb-4 rounded-3 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="fw-bold mb-1">Welcome back, <span th:text="${donor != null ? donor.user.name : 'Valued Donor'}">Rahul Patil</span>!</h4>
+                        <p class="mb-0 text-white-50">Thank you for making a lasting difference with Smart NGO.</p>
+                    </div>
+                    <a th:href="@{/donor/donate}" class="btn btn-light text-success fw-bold py-2 px-3 shadow-sm"><i class="bi bi-heart-fill me-1 text-danger"></i> Make a Donation</a>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <span class="stat-label">Total Donated by You</span>
+                        <div class="stat-value text-success">₹<span th:text="${#numbers.formatDecimal(totalDonated != null ? totalDonated : 0, 1, 'COMMA', 2, 'POINT')}">15,000</span></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <span class="stat-label">Total Contributions Made</span>
+                        <div class="stat-value text-primary" th:text="${#lists.size(myDonations)}">1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Opportunities to Support -->
+            <div class="card custom-table-card p-4">
+                <h6 class="fw-bold mb-3 text-dark">Active Campaigns Needing Support</h6>
+                <div class="row g-3">
+                    <div th:each="camp : ${activeCampaigns}" class="col-md-4">
+                        <div class="border rounded p-3 h-100">
+                            <span class="badge bg-light text-dark border mb-2" th:text="${camp.category}">EDUCATION</span>
+                            <h6 class="fw-bold text-dark" th:text="${camp.name}">Education for All</h6>
+                            <p class="small text-muted mb-3" th:text="${camp.description}">Provide school supplies.</p>
+                            <a th:href="@{'/donor/donate?campaignId=' + ${camp.id}}" class="btn btn-sm btn-outline-success w-100">Donate Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

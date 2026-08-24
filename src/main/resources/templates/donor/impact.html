@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Community Impact')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('impact')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Community & Social Impact')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="card custom-table-card p-4 mb-4">
+                <h5 class="fw-bold text-dark mb-2">How Your Support Transforms Lives</h5>
+                <p class="text-muted small mb-0">Every rupee donated goes directly towards empowering education, healthcare, and environmental sustainability.</p>
+            </div>
+
+            <div class="row g-4">
+                <div th:each="camp : ${campaigns}" class="col-md-6">
+                    <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                        <span class="badge bg-light text-dark border mb-2 w-auto" th:text="${camp.category}">EDUCATION</span>
+                        <h5 class="fw-bold text-dark" th:text="${camp.name}">Education for All</h5>
+                        <p class="text-muted small" th:text="${camp.description}">Providing books, bags, and tuition support.</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                            <span class="small text-muted">Total Funds Mobilized:</span>
+                            <span class="fw-bold text-success">₹<span th:text="${#numbers.formatDecimal(camp.collectedAmount, 1, 'COMMA', 2, 'POINT')}">40,000</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

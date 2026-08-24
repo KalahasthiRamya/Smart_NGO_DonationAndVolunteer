@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  smart-ngo-db:
+    image: mysql:8.0
+    container_name: smart_ngo_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-smart_ngo}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root_password}
+      MYSQL_USER: ${DB_USERNAME:-smart_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-smart_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
+      - ./database/data.sql:/docker-entrypoint-initdb.d/2_data.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
+
+  smart-ngo-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart_ngo_app
+    restart: always
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: smart-ngo-db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-smart_ngo}
+      DB_USERNAME: ${DB_USERNAME:-smart_user}
+      DB_PASSWORD: ${DB_PASSWORD:-smart_password}
+      PAYMENT_MODE: ${PAYMENT_MODE:-mock}
+      NOTIFICATION_MODE: ${NOTIFICATION_MODE:-mock}
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:8080}
+    depends_on:
+      smart-ngo-db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

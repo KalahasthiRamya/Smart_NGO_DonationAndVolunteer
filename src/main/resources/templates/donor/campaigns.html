@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Explore Campaigns')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('campaigns')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Explore NGO Campaigns')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="row g-4">
+                <div th:each="camp : ${campaigns}" class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-3">
+                        <div class="card-body p-4">
+                            <span class="badge bg-light text-dark border mb-2" th:text="${camp.category}">EDUCATION</span>
+                            <h5 class="fw-bold text-dark mb-2" th:text="${camp.name}">Education for All</h5>
+                            <p class="small text-muted mb-3" th:text="${camp.description}">Provide school supplies.</p>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1 small">
+                                    <span>Goal: <strong>₹<span th:text="${#numbers.formatDecimal(camp.targetAmount, 1, 'COMMA', 2, 'POINT')}">60,000</span></strong></span>
+                                    <span class="fw-bold text-success" th:text="${camp.progressPercentage} + '%'">67%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success" role="progressbar" th:style="'width: ' + ${camp.progressPercentage} + '%;'"></div>
+                                </div>
+                            </div>
+                            <a th:href="@{'/donor/donate?campaignId=' + ${camp.id}}" class="btn btn-ngo-primary w-100">Donate Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

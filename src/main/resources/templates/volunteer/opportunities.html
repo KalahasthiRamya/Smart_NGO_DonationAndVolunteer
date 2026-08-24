@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Volunteer Opportunities')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('opportunities')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Upcoming Opportunities')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="row g-4">
+                <div th:each="camp : ${campaigns}" class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm p-4 bg-white rounded-3">
+                        <span class="badge bg-light text-dark border mb-2 w-auto" th:text="${camp.category}">EDUCATION</span>
+                        <h5 class="fw-bold text-dark" th:text="${camp.name}">Education for All</h5>
+                        <p class="small text-muted mb-3" th:text="${camp.description}">Provide tutoring and logistics support.</p>
+                        <div class="mt-auto">
+                            <button class="btn btn-outline-success btn-sm w-100"><i class="bi bi-person-plus me-1"></i> Express Interest</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

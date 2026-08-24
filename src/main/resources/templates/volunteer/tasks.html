@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('My Assigned Tasks')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('tasks')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('My Assigned Tasks')"></header>
+
+        <div class="container-fluid p-4">
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div class="card custom-table-card">
+                <div class="table-responsive">
+                    <table class="table custom-table mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Task ID</th>
+                                <th>Title & Description</th>
+                                <th>Campaign</th>
+                                <th>Due Date</th>
+                                <th>Priority</th>
+                                <th>Current Status</th>
+                                <th>Update Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="task : ${tasks}">
+                                <td class="fw-bold text-muted" th:text="'T00' + ${task.id}">T001</td>
+                                <td>
+                                    <div class="fw-semibold text-dark" th:text="${task.title}">Food Donation Drive</div>
+                                    <div class="small text-muted" th:text="${task.description}">Distribute meals</div>
+                                </td>
+                                <td th:text="${task.campaign != null ? task.campaign.name : 'General'}">Health Drive</td>
+                                <td th:text="${#temporals.format(task.dueDate, 'dd MMM yyyy')}">05 Jun 2024</td>
+                                <td>
+                                    <span class="badge" th:classappend="${task.priority.name() == 'HIGH'} ? 'bg-danger' : 'bg-warning text-dark'" th:text="${task.priority}">HIGH</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-status"
+                                          th:classappend="${task.status.name() == 'COMPLETED'} ? 'badge-completed' : (${task.status.name() == 'IN_PROGRESS'} ? 'badge-pending' : 'badge-active')"
+                                          th:text="${task.status}">ASSIGNED</span>
+                                </td>
+                                <td>
+                                    <form th:action="@{/volunteer/tasks/status}" method="post" class="d-inline">
+                                        <input type="hidden" name="taskId" th:value="${task.id}">
+                                        <select name="status" onchange="this.form.submit()" class="form-select form-select-sm d-inline-block w-auto">
+                                            <option th:each="st : ${taskStatuses}" th:value="${st}" th:text="${st}" th:selected="${st == task.status}"></option>
+                                        </select>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(tasks)}">
+                                <td colspan="7" class="text-center py-4 text-muted">No tasks assigned to you yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

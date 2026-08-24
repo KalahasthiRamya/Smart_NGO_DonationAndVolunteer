@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Volunteer Dashboard')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('dashboard')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Volunteer Dashboard')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="card border-0 bg-primary text-white p-4 mb-4 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="fw-bold mb-1">Welcome back, <span th:text="${volunteer != null ? volunteer.user.name : 'Volunteer'}">Sneha Desai</span>!</h4>
+                        <p class="mb-0 text-white-50">Here are your active task assignments and NGO activities.</p>
+                    </div>
+                    <span class="badge bg-light text-primary fs-6 px-3 py-2">Skills: <strong th:text="${volunteer != null ? volunteer.skills : 'Teaching'}">Teaching</strong></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <span class="stat-label">Assigned Tasks</span>
+                        <div class="stat-value text-primary" th:text="${#lists.size(myTasks)}">3</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <span class="stat-label">Attendance Score</span>
+                        <div class="stat-value text-success"><span th:text="${attendancePercentage}">100</span>%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assigned Tasks Table -->
+            <div class="card custom-table-card p-4">
+                <h6 class="fw-bold mb-3 text-dark">Your Assigned Tasks</h6>
+                <div class="table-responsive">
+                    <table class="table custom-table mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Task Title</th>
+                                <th>Campaign</th>
+                                <th>Due Date</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="task : ${myTasks}">
+                                <td class="fw-bold text-dark" th:text="${task.title}">Food Donation Drive</td>
+                                <td th:text="${task.campaign != null ? task.campaign.name : 'General'}">Health Drive</td>
+                                <td th:text="${#temporals.format(task.dueDate, 'dd MMM yyyy')}">05 Jun 2024</td>
+                                <td>
+                                    <span class="badge" th:classappend="${task.priority.name() == 'HIGH'} ? 'bg-danger' : 'bg-warning text-dark'" th:text="${task.priority}">HIGH</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-status" th:classappend="${task.status.name() == 'COMPLETED'} ? 'badge-completed' : 'badge-active'" th:text="${task.status}">IN_PROGRESS</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(myTasks)}">
+                                <td colspan="5" class="text-center py-4 text-muted">No tasks currently assigned to you.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

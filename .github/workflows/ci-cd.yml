@@ -1,0 +1,28 @@
+name: Smart NGO Platform CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+
+      - name: Set up Java 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run Maven Tests
+        run: mvn clean test -Dspring.profiles.active=test
+
+      - name: Package Spring Boot Application
+        run: mvn package -DskipTests

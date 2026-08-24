@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('My Donations')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('donations')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('My Donation History')"></header>
+
+        <div class="container-fluid p-4">
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div class="card custom-table-card">
+                <div class="table-responsive">
+                    <table class="table custom-table mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Campaign</th>
+                                <th>Amount (₹)</th>
+                                <th>Payment Method</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="don : ${donations}">
+                                <td class="fw-bold text-primary" th:text="${don.transactionId}">TXN_10001</td>
+                                <td th:text="${don.campaign.name}">Education for All</td>
+                                <td class="fw-bold text-dark">₹<span th:text="${#numbers.formatDecimal(don.amount, 1, 'COMMA', 2, 'POINT')}">15,000</span></td>
+                                <td th:text="${don.paymentMethod}">UPI</td>
+                                <td th:text="${#temporals.format(don.donationDate, 'dd MMM yyyy, HH:mm')}">01 May 2024</td>
+                                <td><span class="badge badge-status badge-active" th:text="${don.status}">SUCCESS</span></td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-success" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print Receipt</button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(donations)}">
+                                <td colspan="7" class="text-center py-4 text-muted">You haven't made any donations yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>

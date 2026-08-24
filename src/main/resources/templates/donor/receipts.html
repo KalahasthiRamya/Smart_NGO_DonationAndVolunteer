@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Donation Receipts')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('receipts')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Donation Tax Receipts')"></header>
+
+        <div class="container-fluid p-4">
+            <div class="row g-4">
+                <div th:each="don : ${donations}" class="col-md-6">
+                    <div class="card border-0 shadow-sm rounded-3 p-4 bg-white position-relative">
+                        <div class="d-flex justify-content-between border-bottom pb-3 mb-3">
+                            <div>
+                                <h6 class="fw-bold text-success mb-0"><i class="bi bi-heart-pulse-fill me-1"></i> SMART NGO</h6>
+                                <span class="small text-muted">Official Tax-Deductible Receipt</span>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-light text-dark border">RECEIPT</span>
+                                <div class="small fw-bold text-dark mt-1" th:text="${don.transactionId}">TXN_10001</div>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 small mb-3">
+                            <div class="col-6 text-muted">Donor Name:</div>
+                            <div class="col-6 fw-semibold text-dark text-end" th:text="${don.donor.user.name}">Rahul Patil</div>
+                            <div class="col-6 text-muted">Campaign Supported:</div>
+                            <div class="col-6 fw-semibold text-dark text-end" th:text="${don.campaign.name}">Education for All</div>
+                            <div class="col-6 text-muted">Date of Payment:</div>
+                            <div class="col-6 fw-semibold text-dark text-end" th:text="${#temporals.format(don.donationDate, 'dd MMM yyyy')}">01 May 2024</div>
+                            <div class="col-6 text-muted">Amount Received:</div>
+                            <div class="col-6 fs-5 fw-bold text-success text-end">₹<span th:text="${#numbers.formatDecimal(don.amount, 1, 'COMMA', 2, 'POINT')}">15,000</span></div>
+                        </div>
+
+                        <button onclick="window.print()" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-download me-1"></i> Print / Download PDF Receipt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+</body>
+</html>
