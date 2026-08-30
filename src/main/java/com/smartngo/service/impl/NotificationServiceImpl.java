@@ -3,13 +3,16 @@ package com.smartngo.service.impl;
 import com.smartngo.entity.Notification;
 import com.smartngo.entity.User;
 import com.smartngo.enums.NotificationType;
+import com.smartngo.enums.Role;
 import com.smartngo.repository.NotificationRepository;
+import com.smartngo.repository.UserRepository;
 import com.smartngo.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,7 +27,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
+    @Transactional
     public Notification sendNotification(User user, NotificationType type, String message) {
         Notification notification = Notification.builder()
                 .user(user)
@@ -55,10 +62,32 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    @Transactional
     public void markAsRead(Long notificationId) {
         notificationRepository.findById(notificationId).ifPresent(n -> {
             n.setStatus("READ");
             notificationRepository.save(n);
         });
+    }
+
+    @Override
+    @Transactional
+    public void markAllAsRead(User user) {
+        List<Notification> unread = notificationRepository.findByUserOrderByCreatedAtDesc(user);
+        for (Notification n : unread) {
+            if ("UNREAD".equalsIgnoreCase(n.getStatus())) {
+                n.setStatus("READ");
+                notificationRepository.save(n);
+            }
+        }
+    }
+
+    @Override
+    @Transactional
+    public void notifyAllAdmins(NotificationType type, String message) {
+        List<User> admins = userRepository.findByRole(Role.ADMIN);
+        for (User admin : admins) {
+            sendNotification(admin, type, message);
+        }
     }
 }

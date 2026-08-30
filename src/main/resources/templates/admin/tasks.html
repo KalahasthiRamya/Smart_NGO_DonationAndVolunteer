@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="fragments/head :: head('Task Management')"></head>
+
 <body>
     <div id="sidebar" th:replace="fragments/sidebar :: sidebar('tasks')"></div>
 
@@ -18,7 +20,8 @@
                     <h5 class="fw-bold text-dark mb-1">Volunteer Tasks & Activities</h5>
                     <p class="text-muted small mb-0">Assign responsibilities and track completion progress</p>
                 </div>
-                <button type="button" class="btn btn-ngo-primary" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+                <button type="button" class="btn btn-ngo-primary" data-bs-toggle="modal"
+                    data-bs-target="#createTaskModal">
                     <i class="bi bi-plus-lg me-1"></i> Assign New Task
                 </button>
             </div>
@@ -43,27 +46,36 @@
                                 <td class="fw-bold text-muted" th:text="'T00' + ${task.id}">T001</td>
                                 <td>
                                     <div class="fw-semibold text-dark" th:text="${task.title}">Food Donation Drive</div>
-                                    <div class="small text-muted" th:text="${task.description}">Distribute meal boxes</div>
+                                    <div class="small text-muted" th:text="${task.description}">Distribute meal boxes
+                                    </div>
                                 </td>
-                                <td th:text="${task.campaign != null ? task.campaign.name : 'General'}">Health Drive</td>
+                                <td th:text="${task.campaign != null ? task.campaign.name : 'General'}">Health Drive
+                                </td>
                                 <td>
-                                    <span th:if="${task.assignedVolunteer != null}" th:text="${task.assignedVolunteer.user.name}" class="fw-semibold text-dark">Sneha Desai</span>
-                                    <span th:unless="${task.assignedVolunteer != null}" class="text-muted fst-italic">Unassigned</span>
+                                    <span th:if="${task.assignedVolunteer != null}"
+                                        th:text="${task.assignedVolunteer.user.name}"
+                                        class="fw-semibold text-dark">Sneha Desai</span>
+                                    <span th:unless="${task.assignedVolunteer != null}"
+                                        class="text-muted fst-italic">Unassigned</span>
                                 </td>
                                 <td th:text="${#temporals.format(task.dueDate, 'dd MMM yyyy')}">05 Jun 2024</td>
                                 <td>
-                                    <span class="badge" th:classappend="${task.priority.name() == 'HIGH'} ? 'bg-danger' : (${task.priority.name() == 'MEDIUM'} ? 'bg-warning text-dark' : 'bg-secondary')" th:text="${task.priority}">HIGH</span>
+                                    <span class="badge"
+                                        th:classappend="${task.priority.name() == 'HIGH'} ? 'bg-danger' : (${task.priority.name() == 'MEDIUM'} ? 'bg-warning text-dark' : 'bg-secondary')"
+                                        th:text="${task.priority}">HIGH</span>
                                 </td>
                                 <td>
                                     <span class="badge badge-status"
-                                          th:classappend="${task.status.name() == 'COMPLETED'} ? 'badge-completed' : (${task.status.name() == 'IN_PROGRESS'} ? 'badge-pending' : 'badge-active')"
-                                          th:text="${task.status}">ASSIGNED</span>
+                                        th:classappend="${task.status.name() == 'COMPLETED'} ? 'badge-completed' : (${task.status.name() == 'IN_PROGRESS'} ? 'badge-pending' : 'badge-active')"
+                                        th:text="${task.status}">ASSIGNED</span>
                                 </td>
                                 <td>
                                     <form th:action="@{/admin/tasks/status}" method="post" class="d-inline">
                                         <input type="hidden" name="id" th:value="${task.id}">
-                                        <select name="status" onchange="this.form.submit()" class="form-select form-select-sm d-inline-block w-auto">
-                                            <option th:each="st : ${statuses}" th:value="${st}" th:text="${st}" th:selected="${st == task.status}"></option>
+                                        <select name="status" onchange="this.form.submit()"
+                                            class="form-select form-select-sm d-inline-block w-auto">
+                                            <option th:each="st : ${statuses}" th:value="${st}" th:text="${st}"
+                                                th:selected="${st == task.status}"></option>
                                         </select>
                                     </form>
                                 </td>
@@ -89,25 +101,29 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label class="form-label small fw-semibold text-secondary">Task Title</label>
-                                <input type="text" name="title" class="form-control" placeholder="e.g. Conduct Science Tutorial" required>
+                                <input type="text" name="title" class="form-control"
+                                    placeholder="e.g. Conduct Science Tutorial" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label small fw-semibold text-secondary">Description</label>
-                                <textarea name="description" class="form-control" rows="2" placeholder="Task specifics and goals"></textarea>
+                                <textarea name="description" class="form-control" rows="2"
+                                    placeholder="Task specifics and goals"></textarea>
                             </div>
                             <div class="row g-2 mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label small fw-semibold text-secondary">Campaign</label>
                                     <select name="campaignId" class="form-select">
                                         <option value="">-- None (General) --</option>
-                                        <option th:each="c : ${campaigns}" th:value="${c.id}" th:text="${c.name}"></option>
+                                        <option th:each="c : ${campaigns}" th:value="${c.id}" th:text="${c.name}">
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-semibold text-secondary">Assign Volunteer</label>
                                     <select name="volunteerId" class="form-select">
                                         <option value="">-- Unassigned --</option>
-                                        <option th:each="v : ${volunteers}" th:value="${v.id}" th:text="${v.user.name} + ' (' + ${v.skills} + ')'"></option>
+                                        <option th:each="v : ${volunteers}" th:value="${v.id}"
+                                            th:text="${v.user.name} + ' (' + ${v.skills} + ')'"></option>
                                     </select>
                                 </div>
                             </div>
@@ -140,4 +156,5 @@
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>
 </body>
+
 </html>

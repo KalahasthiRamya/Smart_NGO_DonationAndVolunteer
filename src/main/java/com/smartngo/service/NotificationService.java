@@ -11,4 +11,6 @@ public interface NotificationService {
     List<Notification> getUserNotifications(User user);
     long countUnreadNotifications(User user);
     void markAsRead(Long notificationId);
+    void markAllAsRead(User user);
+    void notifyAllAdmins(NotificationType type, String message);
 }

@@ -1,11 +1,13 @@
 package com.smartngo.service.impl;
 
 import com.smartngo.entity.Donor;
+import com.smartngo.entity.User;
 import com.smartngo.exception.ResourceNotFoundException;
 import com.smartngo.repository.DonorRepository;
 import com.smartngo.service.DonorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,6 +40,22 @@ public class DonorServiceImpl implements DonorService {
     }
 
     @Override
+    @Transactional
+    public Donor createDonor(User user) {
+        Optional<Donor> existing = donorRepository.findByUserId(user.getId());
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+        Donor donor = Donor.builder()
+                .user(user)
+                .totalDonations(BigDecimal.ZERO)
+                .status("ACTIVE")
+                .build();
+        return donorRepository.save(donor);
+    }
+
+    @Override
+    @Transactional
     public Donor updateDonorStatus(Long id, String status) {
         Donor donor = donorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Donor not found with id: " + id));
@@ -49,6 +67,7 @@ public class DonorServiceImpl implements DonorService {
     }
 
     @Override
+    @Transactional
     public void deleteDonor(Long id) {
         if (!donorRepository.existsById(id)) {
             throw new ResourceNotFoundException("Donor not found with id: " + id);

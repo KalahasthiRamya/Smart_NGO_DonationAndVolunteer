@@ -12,6 +12,10 @@
                 <span th:text="${successMessage}"></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
@@ -21,6 +25,22 @@
                 <button type="button" class="btn btn-ngo-primary" data-bs-toggle="modal" data-bs-target="#createDonationModal">
                     <i class="bi bi-plus-lg me-1"></i> Record New Donation
                 </button>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card metric-card">
+                        <div class="metric-title">Total Donated</div>
+                        <div class="metric-value">₹<span th:text="${#numbers.formatDecimal(totalAmount, 1, 'COMMA', 2, 'POINT')}">0.00</span></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card metric-card">
+                        <div class="metric-title">Total Donations</div>
+                        <div class="metric-value" th:text="${totalCount}">0</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Table -->
@@ -71,12 +91,41 @@
                     </div>
                     <form th:action="@{/admin/donations/create}" method="post">
                         <div class="modal-body">
+                            <!-- Option Selection -->
                             <div class="mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Donor Option</label>
+                                <select id="donorOptionSelect" class="form-select" onchange="toggleDonorFields(this.value)">
+                                    <option value="existing">Select Existing Donor</option>
+                                    <option value="new">+ Add New Donor</option>
+                                </select>
+                            </div>
+
+                            <!-- Existing Donor Select -->
+                            <div id="existingDonorSection" class="mb-3">
                                 <label class="form-label small fw-semibold text-secondary">Select Donor</label>
-                                <select name="donorId" class="form-select" required>
+                                <select name="donorId" class="form-select">
+                                    <option value="">-- Choose Existing Donor --</option>
                                     <option th:each="d : ${donors}" th:value="${d.id}" th:text="${d.user.name} + ' (' + ${d.user.email} + ')'"></option>
                                 </select>
                             </div>
+
+                            <!-- New Donor Section -->
+                            <div id="newDonorSection" class="p-3 bg-light rounded border mb-3 d-none">
+                                <h6 class="fw-bold text-primary mb-2 style-xs"><i class="bi bi-person-plus me-1"></i>New Donor Information</h6>
+                                <div class="mb-2">
+                                    <label class="form-label style-xs fw-semibold text-secondary">Full Name</label>
+                                    <input type="text" name="newDonorName" class="form-control form-control-sm" placeholder="e.g. Anish Gupta">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label style-xs fw-semibold text-secondary">Email Address</label>
+                                    <input type="email" name="newDonorEmail" class="form-control form-control-sm" placeholder="e.g. anish@example.com">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label style-xs fw-semibold text-secondary">Phone Number</label>
+                                    <input type="text" name="newDonorPhone" class="form-control form-control-sm" placeholder="e.g. 9876543210">
+                                </div>
+                            </div>
+
                             <div class="mb-3">
                                 <label class="form-label small fw-semibold text-secondary">Select Campaign</label>
                                 <select name="campaignId" class="form-select" required>
@@ -105,6 +154,20 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            function toggleDonorFields(val) {
+                var existingSec = document.getElementById('existingDonorSection');
+                var newSec = document.getElementById('newDonorSection');
+                if (val === 'new') {
+                    existingSec.classList.add('d-none');
+                    newSec.classList.remove('d-none');
+                } else {
+                    existingSec.classList.remove('d-none');
+                    newSec.classList.add('d-none');
+                }
+            }
+        </script>
 
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>

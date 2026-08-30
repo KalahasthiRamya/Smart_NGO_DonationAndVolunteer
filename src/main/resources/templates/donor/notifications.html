@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('Notifications')"></head>
+<head th:replace="fragments/head :: head('My Notifications')"></head>
 <body>
-    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('messages')"></div>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('notifications')"></div>
 
     <div id="main-content">
-        <header th:replace="fragments/header :: header('Messages & Alerts')"></header>
+        <header th:replace="fragments/header :: header('My Notifications')"></header>
 
         <div class="container-fluid p-4">
             <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
@@ -15,8 +15,8 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h5 class="fw-bold text-dark mb-1">System Notifications</h5>
-                    <p class="text-muted small mb-0">System alerts, donor events, and activity logs</p>
+                    <h5 class="fw-bold text-dark mb-1">Donor Notifications</h5>
+                    <p class="text-muted small mb-0">Donation receipts, campaign updates, and alerts</p>
                 </div>
                 <form th:action="@{/notifications/mark-all-read}" method="post" th:if="${unreadNotificationCount > 0}">
                     <button type="submit" class="btn btn-outline-primary btn-sm">
@@ -27,9 +27,9 @@
 
             <div class="card custom-table-card p-4">
                 <div class="list-group list-group-flush">
-                    <div th:each="n : ${recentNotifications}" class="list-group-item py-3" th:classappend="${n.status == 'UNREAD'} ? 'bg-light border-start border-4 border-primary' : ''">
+                    <div th:each="n : ${notifications}" class="list-group-item py-3" th:classappend="${n.status == 'UNREAD'} ? 'bg-light border-start border-4 border-primary' : ''">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="badge bg-primary text-uppercase" style="font-size: 0.65rem;" th:text="${n.type}">SYSTEM</span>
+                            <span class="badge bg-success text-uppercase" style="font-size: 0.65rem;" th:text="${n.type}">RECEIPT</span>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="small text-muted" th:text="${#temporals.format(n.createdAt, 'dd MMM yyyy, HH:mm')}">Just now</span>
                                 <form th:if="${n.status == 'UNREAD'}" th:action="@{'/notifications/mark-read/' + ${n.id}}" method="post" class="d-inline">
@@ -39,8 +39,8 @@
                         </div>
                         <div class="fw-semibold text-dark" th:text="${n.message}">Notification message text.</div>
                     </div>
-                    <div th:if="${#lists.isEmpty(recentNotifications)}" class="py-4 text-center text-muted">
-                        No notifications recorded.
+                    <div th:if="${#lists.isEmpty(notifications)}" class="py-4 text-center text-muted">
+                        No notifications found.
                     </div>
                 </div>
             </div>

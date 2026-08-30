@@ -1,12 +1,15 @@
 package com.smartngo.service.impl;
 
+import com.smartngo.entity.User;
 import com.smartngo.entity.Volunteer;
 import com.smartngo.exception.ResourceNotFoundException;
 import com.smartngo.repository.VolunteerRepository;
 import com.smartngo.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +40,23 @@ public class VolunteerServiceImpl implements VolunteerService {
     }
 
     @Override
+    @Transactional
+    public Volunteer registerVolunteer(User user, String skills) {
+        Optional<Volunteer> existing = volunteerRepository.findByUserId(user.getId());
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+        Volunteer volunteer = Volunteer.builder()
+                .user(user)
+                .skills(skills != null ? skills : "General Support")
+                .status("ACTIVE")
+                .joinedDate(LocalDate.now())
+                .build();
+        return volunteerRepository.save(volunteer);
+    }
+
+    @Override
+    @Transactional
     public Volunteer updateVolunteerSkillsAndStatus(Long id, String skills, String status) {
         Volunteer volunteer = volunteerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Volunteer not found with id: " + id));
@@ -53,6 +73,7 @@ public class VolunteerServiceImpl implements VolunteerService {
     }
 
     @Override
+    @Transactional
     public void deleteVolunteer(Long id) {
         if (!volunteerRepository.existsById(id)) {
             throw new ResourceNotFoundException("Volunteer not found with id: " + id);

@@ -44,6 +44,12 @@
             </a>
         </li>
         <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+            <a th:href="@{/admin/impact}" class="nav-link" th:classappend="${activeTab == 'impact'} ? 'active'">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span>Impact Dashboard</span>
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
             <a th:href="@{/admin/attendance}" class="nav-link" th:classappend="${activeTab == 'attendance'} ? 'active'">
                 <i class="bi bi-calendar-check-fill"></i>
                 <span>Attendance</span>
@@ -58,7 +64,7 @@
         <li sec:authorize="hasRole('ADMIN')" class="nav-item">
             <a th:href="@{/admin/notifications}" class="nav-link" th:classappend="${activeTab == 'messages'} ? 'active'">
                 <i class="bi bi-envelope-fill"></i>
-                <span>Messages</span>
+                <span>Notifications</span>
             </a>
         </li>
         <li sec:authorize="hasRole('ADMIN')" class="nav-item">

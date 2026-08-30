@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Impact Dashboard & Social Analytics')"></head>
+<body>
+    <div id="sidebar" th:replace="fragments/sidebar :: sidebar('impact')"></div>
+
+    <div id="main-content">
+        <header th:replace="fragments/header :: header('Impact Dashboard & Analytics')"></header>
+
+        <div class="container-fluid p-4">
+            <!-- Header Title Banner -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h4 class="fw-bold text-dark mb-1"><i class="bi bi-graph-up-arrow text-success me-2"></i>Social & Financial Impact Analytics</h4>
+                    <p class="text-muted small mb-0">Real-time database-driven impact tracking, financial contributions, and volunteer performance</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a th:href="@{/reports/impact/export}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-download me-1"></i> Export Impact Report
+                    </a>
+                </div>
+            </div>
+
+            <!-- Summary KPI Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card metric-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="metric-title">Total Funds Raised</div>
+                                <div class="metric-value">₹<span th:text="${#numbers.formatDecimal(stats.totalDonations, 1, 'COMMA', 2, 'POINT')}">1,25,000.00</span></div>
+                                <div class="metric-subtitle text-success"><i class="bi bi-arrow-up-right"></i> Direct Community Funding</div>
+                            </div>
+                            <div class="fs-1 text-primary opacity-50"><i class="bi bi-currency-rupee"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card metric-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="metric-title">Active Donors</div>
+                                <div class="metric-value" th:text="${stats.totalDonors}">245</div>
+                                <div class="metric-subtitle text-success"><i class="bi bi-arrow-up-right"></i> Verified Supporters</div>
+                            </div>
+                            <div class="fs-1 text-success opacity-50"><i class="bi bi-people-fill"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card metric-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="metric-title">Active Volunteers</div>
+                                <div class="metric-value" th:text="${stats.totalVolunteers}">132</div>
+                                <div class="metric-subtitle text-success"><i class="bi bi-arrow-up-right"></i> Engaged Contributors</div>
+                            </div>
+                            <div class="fs-1 text-purple opacity-50"><i class="bi bi-person-badge-fill"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="card metric-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="metric-title">Completed Activities</div>
+                                <div class="metric-value" th:text="${stats.totalActivities}">18</div>
+                                <div class="metric-subtitle text-success"><i class="bi bi-check-circle-fill"></i> Field Work & Tasks</div>
+                            </div>
+                            <div class="fs-1 text-warning opacity-50"><i class="bi bi-check2-square"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart.js Section -->
+            <div class="row g-4 mb-4">
+                <!-- Donations Over Time Line Chart -->
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-graph-up text-primary me-2"></i>Donation Growth Trend</h6>
+                            <span class="badge bg-light text-dark border">Real-Time Data</span>
+                        </div>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="donationsTimeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Donations by Category Doughnut Chart -->
+                <div class="col-lg-5">
+                    <div class="card border-0 shadow-sm p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-pie-chart-fill text-success me-2"></i>Fund Allocation by Sector</h6>
+                            <span class="badge bg-light text-dark border">Categories</span>
+                        </div>
+                        <div style="position: relative; height: 300px;" class="d-flex align-items-center justify-content-center">
+                            <canvas id="donationsCategoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campaign Financial Progress Cards -->
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-bullseye text-danger me-2"></i>Campaign Impact & Financial Progress</h6>
+                <div class="row g-3">
+                    <div class="col-md-6 col-lg-4" th:each="c : ${activeCampaigns}">
+                        <div class="p-3 border rounded bg-light h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold text-dark mb-0" th:text="${c.name}">Education for All</h6>
+                                <span class="badge bg-primary text-uppercase" style="font-size: 0.65rem;" th:text="${c.category}">EDUCATION</span>
+                            </div>
+                            <p class="text-muted small mb-3" th:text="${c.description}">Provide free school supplies</p>
+                            
+                            <div class="d-flex justify-content-between small text-secondary fw-semibold mb-1">
+                                <span>Raised: ₹<span th:text="${#numbers.formatDecimal(c.collectedAmount, 1, 'COMMA', 0, 'POINT')}">40,000</span></span>
+                                <span>Target: ₹<span th:text="${#numbers.formatDecimal(c.targetAmount, 1, 'COMMA', 0, 'POINT')}">60,000</span></span>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                     th:style="'width: ' + ${c.targetAmount.doubleValue() > 0 ? (c.collectedAmount.doubleValue() / c.targetAmount.doubleValue() * 100) : 0} + '%'"
+                                     th:aria-valuenow="${c.targetAmount.doubleValue() > 0 ? (c.collectedAmount.doubleValue() / c.targetAmount.doubleValue() * 100) : 0}"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="text-end mt-1">
+                                <span class="badge bg-success bg-opacity-10 text-success fw-bold" style="font-size: 0.7rem;"
+                                      th:text="${#numbers.formatDecimal(c.targetAmount.doubleValue() > 0 ? (c.collectedAmount.doubleValue() / c.targetAmount.doubleValue() * 100) : 0, 1, 0)} + '% Achieved'">67% Achieved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+
+    <!-- Include Chart.js script -->
+    <script th:src="@{/js/dashboard-charts.js}"></script>
+</body>
+</html>
