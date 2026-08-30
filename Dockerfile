@@ -20,10 +20,11 @@ COPY --from=builder /app/target/smart-ngo-platform-1.0.0.jar app.jar
 # Environment defaults
 ENV PORT=8080
 ENV SPRING_PROFILES_ACTIVE=prod
+ENV JAVA_OPTS="-Xms128m -Xmx384m -XX:+UseSerialGC"
 
 EXPOSE ${PORT}
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:${PORT}/actuator/health || exit 1
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar app.jar"]
