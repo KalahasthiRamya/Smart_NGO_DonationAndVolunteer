@@ -74,20 +74,14 @@ public class DataInitializer implements CommandLineRunner {
                     .status("ACTIVE")
                     .build();
             userRepository.save(admin);
-            log.info("Created production administrator account: {}", envAdminEmail);
+            log.info("Created administrator account: {}", envAdminEmail);
         } else {
             admin.setPassword(passwordEncoder.encode(envAdminPassword));
             userRepository.save(admin);
             log.info("Synced credentials for administrator account: {}", envAdminEmail);
         }
 
-        // In production profile, stop after bootstrapping admin account to keep production DB clean
-        if ("prod".equalsIgnoreCase(activeProfile)) {
-            log.info("Production profile active. Skipping demo seed data population.");
-            return;
-        }
-
-        // 2. Dev / Test Demo Seed Data
+        // 2. Ensure Default Demo Accounts & Active Campaigns Exist Across All Profiles
         User donorUser = userRepository.findByEmail("rahul@gmail.com").orElse(null);
         if (donorUser == null) {
             donorUser = User.builder()
@@ -100,6 +94,7 @@ public class DataInitializer implements CommandLineRunner {
                     .build();
             userRepository.save(donorUser);
             donorRepository.save(Donor.builder().user(donorUser).totalDonations(new BigDecimal("15000.00")).status("ACTIVE").build());
+            log.info("Created default donor account: rahul@gmail.com");
         } else {
             donorUser.setPassword(passwordEncoder.encode("donor123"));
             userRepository.save(donorUser);
@@ -117,15 +112,17 @@ public class DataInitializer implements CommandLineRunner {
                     .build();
             userRepository.save(volUser);
             volunteerRepository.save(Volunteer.builder().user(volUser).skills("Teaching").status("ACTIVE").joinedDate(LocalDate.of(2024, 1, 10)).build());
+            log.info("Created default volunteer account: sneha@gmail.com");
         } else {
             volUser.setPassword(passwordEncoder.encode("volunteer123"));
             userRepository.save(volUser);
         }
 
         if (campaignRepository.count() == 0) {
-            Campaign c1 = campaignRepository.save(Campaign.builder().name("Education for All").description("Provide free school supplies and scholarships").category(CampaignCategory.EDUCATION).targetAmount(new BigDecimal("60000.00")).collectedAmount(new BigDecimal("40000.00")).startDate(LocalDate.of(2024, 1, 1)).endDate(LocalDate.of(2024, 12, 31)).status(CampaignStatus.ACTIVE).build());
+            campaignRepository.save(Campaign.builder().name("Education for All").description("Provide free school supplies and scholarships").category(CampaignCategory.EDUCATION).targetAmount(new BigDecimal("60000.00")).collectedAmount(new BigDecimal("40000.00")).startDate(LocalDate.of(2024, 1, 1)).endDate(LocalDate.of(2024, 12, 31)).status(CampaignStatus.ACTIVE).build());
             campaignRepository.save(Campaign.builder().name("Health & Wellness Drive").description("Free health checkup camps in rural areas").category(CampaignCategory.HEALTH).targetAmount(new BigDecimal("50000.00")).collectedAmount(new BigDecimal("30000.00")).startDate(LocalDate.of(2024, 2, 1)).endDate(LocalDate.of(2024, 11, 30)).status(CampaignStatus.ACTIVE).build());
             campaignRepository.save(Campaign.builder().name("Green Earth Initiative").description("Tree plantation and awareness programs").category(CampaignCategory.ENVIRONMENT).targetAmount(new BigDecimal("40000.00")).collectedAmount(new BigDecimal("20000.00")).startDate(LocalDate.of(2024, 3, 1)).endDate(LocalDate.of(2024, 10, 31)).status(CampaignStatus.ACTIVE).build());
+            log.info("Seeded initial active NGO campaigns.");
         }
 
         log.info("DataInitializer completed successfully.");
