@@ -293,3 +293,20 @@ body {
 .auth-form-container {
     padding: 3rem 2.5rem;
 }
+
+/* Form Select & Dropdown Interaction Enhancements */
+.form-select {
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    background-color: #ffffff;
+}
+
+.form-select:focus {
+    border-color: var(--ngo-green);
+    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+}
+
+.modal-body {
+    overflow-y: visible;
+}

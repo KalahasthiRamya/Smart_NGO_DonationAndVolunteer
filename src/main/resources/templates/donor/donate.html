@@ -21,8 +21,9 @@
 
                         <form th:action="@{/donor/donate}" method="post">
                             <div class="mb-3">
-                                <label class="form-label small fw-semibold text-secondary">Select Campaign</label>
-                                <select name="campaignId" class="form-select" required>
+                                <label class="form-label small fw-semibold text-secondary" for="campaignSelect">Select Campaign</label>
+                                <select name="campaignId" id="campaignSelect" class="form-select" required>
+                                    <option value="">-- Choose Campaign --</option>
                                     <option th:each="camp : ${campaigns}" th:value="${camp.id}" th:text="${camp.name}" th:selected="${camp.id == selectedCampaignId}"></option>
                                 </select>
                             </div>
@@ -36,11 +37,10 @@
                             </div>
 
                             <div class="mb-4">
-                                <label class="form-label small fw-semibold text-secondary">Payment Method</label>
-                                <select name="paymentMethod" class="form-select" required>
-                                    <option value="UPI">UPI Payment</option>
-                                    <option value="CARD">Credit / Debit Card</option>
-                                    <option value="NET_BANKING">Net Banking</option>
+                                <label class="form-label small fw-semibold text-secondary" for="paymentMethodSelect">Payment Method</label>
+                                <select name="paymentMethod" id="paymentMethodSelect" class="form-select" required>
+                                    <option value="">-- Select Payment Method --</option>
+                                    <option th:each="pm : ${paymentMethods}" th:value="${pm}" th:text="${pm}"></option>
                                 </select>
                             </div>
 

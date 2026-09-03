@@ -82,18 +82,18 @@
         </div>
 
         <!-- Record Donation Modal -->
-        <div class="modal fade" id="createDonationModal" tabindex="-1">
+        <div class="modal fade" id="createDonationModal" tabindex="-1" aria-labelledby="createDonationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header border-bottom-0">
-                        <h5 class="modal-title fw-bold text-dark">Record New Donation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <h5 class="modal-title fw-bold text-dark" id="createDonationModalLabel">Record New Donation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form th:action="@{/admin/donations/create}" method="post">
-                        <div class="modal-body">
+                        <div class="modal-body" style="overflow-y: visible;">
                             <!-- Option Selection -->
                             <div class="mb-3">
-                                <label class="form-label small fw-semibold text-secondary">Donor Option</label>
+                                <label class="form-label small fw-semibold text-secondary" for="donorOptionSelect">Donor Option</label>
                                 <select id="donorOptionSelect" class="form-select" onchange="toggleDonorFields(this.value)">
                                     <option value="existing">Select Existing Donor</option>
                                     <option value="new">+ Add New Donor</option>
@@ -102,8 +102,8 @@
 
                             <!-- Existing Donor Select -->
                             <div id="existingDonorSection" class="mb-3">
-                                <label class="form-label small fw-semibold text-secondary">Select Donor</label>
-                                <select name="donorId" class="form-select">
+                                <label class="form-label small fw-semibold text-secondary" for="donorIdSelect">Select Donor</label>
+                                <select name="donorId" id="donorIdSelect" class="form-select">
                                     <option value="">-- Choose Existing Donor --</option>
                                     <option th:each="d : ${donors}" th:value="${d.id}" th:text="${d.user.name} + ' (' + ${d.user.email} + ')'"></option>
                                 </select>
@@ -127,18 +127,20 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label small fw-semibold text-secondary">Select Campaign</label>
-                                <select name="campaignId" class="form-select" required>
+                                <label class="form-label small fw-semibold text-secondary" for="adminCampaignSelect">Select Campaign</label>
+                                <select name="campaignId" id="adminCampaignSelect" class="form-select" required>
+                                    <option value="">-- Choose Campaign --</option>
                                     <option th:each="c : ${campaigns}" th:value="${c.id}" th:text="${c.name}"></option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label small fw-semibold text-secondary">Donation Amount (₹)</label>
-                                <input type="number" step="0.01" name="amount" class="form-control" placeholder="e.g. 5000" required>
+                                <input type="number" step="0.01" min="1" name="amount" class="form-control" placeholder="e.g. 5000" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small fw-semibold text-secondary">Payment Method</label>
-                                <select name="paymentMethod" class="form-select" required>
+                                <label class="form-label small fw-semibold text-secondary" for="adminPaymentMethodSelect">Payment Method</label>
+                                <select name="paymentMethod" id="adminPaymentMethodSelect" class="form-select" required>
+                                    <option value="">-- Select Payment Method --</option>
                                     <option value="UPI">UPI</option>
                                     <option value="CARD">Credit/Debit Card</option>
                                     <option value="NET_BANKING">Net Banking</option>
@@ -159,9 +161,11 @@
             function toggleDonorFields(val) {
                 var existingSec = document.getElementById('existingDonorSection');
                 var newSec = document.getElementById('newDonorSection');
+                var donorSelect = document.getElementById('donorIdSelect');
                 if (val === 'new') {
                     existingSec.classList.add('d-none');
                     newSec.classList.remove('d-none');
+                    if (donorSelect) donorSelect.value = '';
                 } else {
                     existingSec.classList.remove('d-none');
                     newSec.classList.add('d-none');
